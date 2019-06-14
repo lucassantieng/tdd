@@ -1,0 +1,279 @@
+#############
+AULA 1 - PORQUE, QUAIS BENEFICIOS EM UTILIZAR TESTES?
+#############
+
+IMPORTANCIA DO TESTE NAS APLICAÇÕES
+
+PORQUE TESTAR?
+
+Pense um pouco: VOCE COMPRARIA UM PRODUTO TESTADO OU UM QUE NAO FOI TESTADO? Essa resposta é fácil.
+
+Teste esta relacionado com a qualidade do produto. Porque ? Uai, se ele foi testado é pq esta ok.
+se eu testo algo e ele for aprovado, quer dizer que esse algo condiz com o que era para ele fazer.
+
+Um teste que não agrega valor a um produto final, não é um teste. Fazer o Mínimo não é suficiente para falar de qualidade.
+
+Hoje em dia construimos códigos e não realizamos testes por achar que ele esta funcionando.
+
+
+
+Cenários: TESTES MANUAIS OU AUTOMATIZADOS (um ou outro)
+
+problemas com testes manuais:
+-testadores viciam -> 
+-testadores acordam de mal humor as vezes -> ser humano esta passível de erro
+-testes manuais sao lentos -> antes de fazer um deploy é necessário fazer todos os cenários possíveis
+
+benefícios de testes automatizados:
+-permite maior cobertura de testes -> roda em tempo menor com maior numero de cenários
+-incentivo para refatoração -> se o código nao estiver legal irá apontar
+-evita longas sessoes de debug -> os testes irá apontar exatamente local onde esta com erro
+-rapido feedback -> vou saber rápido se o código esta funcinando ou nao, momentaneamente
+-servem como documentacao -> relatório das features
+
+
+TESTE DE UNIDADE: Um teste de unidade valida uma determinada funcionalidade do sistema
+necessário entender que:
+um Módulo é uma classe
+
+ex: classe de usuário 
+
+teste de unidade não depende de nunhum outro módulo para ser testado
+testa uma unidade de uma vez
+
+teste de unidade não pode demorar, se demorar tem algum problema
+teste de unidade nao pode depender de objeto que cause efeito na minha classe 
+exemplo:
+
+cenário:
+testando classe de serviço  e essa classe serviço terá que armazenar o objeto usuário e regras de negócio
+nessa situação será necessário simular a utilização do banco de dados (
+pq ? pq o teste esta testando a classe serviço e não o banco de dados
+
+
+TESTE E2E? Um teste e2e simula um comportamento do usuário.
+nesse teste é testado a simulação inteira (front, back, banco).
+
+
+
+O QUE NAO É CORRETO:
+-
+
+CORRETO:
+- na aplicação o que mais tenho que ter é teste de unidade: pq é barato e simples de ser feito, todo desenvolver tem que saber como testar
+- na aplicação nao precisar ter, teste de automação demora mais e é mais caro.
+
+POR ONDE COMEÇAR:
+-por onde retorna o investimento
+-definir critérios de aceitação (guia o que irei testar)
+
+
+
+######################
+ESCOPO QUE SERÁ CRIADA
+######################
+
+CURSOS ONLINE: - MODULO ADMINISTRATIVO DE UM SISTEMA DE CURSO ONLINE
+
+CADASTRAR OS CURSOS
+ALUNOS
+
+VINCULAR MATRICULA COM CURSO E ALUNO
+
+CADA UM SERÁ UM DOMINIO: 
+
+REGRAS-CURSO:
+- um curso para ser criado deverá informar seu nome, carga horário, publico alvo e valor do curso
+- um curso nao deverá ser salvo com o mesmo nome de outro curso
+
+REGRAS-ALUNO:
+- um aluno antes de fazer a matricula deverá estar devidamente cadastrado e para isso sao necessários os dados: nome, cpf, data de nascimento e qual publico alvvo ele pertence
+- nao deverá permitir salvar dois cpfs iguais
+
+REGRAS-MATRICULA:
+- para efetuar a matricula do curso é necessário informar o curso, aluno e o valor pago no curso.
+- um aluno nao poderá efetuar uma nova matricula caso esteja com uma matricula em aberto.
+- alguns alunos nao pagam o valor do curso cheio, nesse caso é dado um desconto. Porém, o aluno nunca deverá pagar mais do que o valor do curso.
+- no momento da matricula, publico alvo do curso e aluno devem ser o mesmo.
+
+
+################################
+TESTE BASICO DO TESTE DE UNIDADE
+################################
+
+O QUE NÃO FAZER EM UM TESTE DE UNIDADE:
+-testar banco de dados, email e outras coisas-> tudo que é externo a aplicação
+-escrever testes que dependem de outros testes-> um módulo nao pode depender de outro método(somente tdd)
+-escrever nome de testes inadequados-> nome de testes devem ser congruentes
+-fazer multiplos asserts***-> todo assert é uma verificação, se houver muitos, será dificil saber onde esta o problema
+-atingir 100% de cobertura-> nao é indicado pq irá testar até framework
+-nao cuidar dos testes como o código de produção-> se nao cuidar do teste irá ser uma dor de cabeça
+-nao escutar os testes -> nao dar ouvidos aos resultados
+
+
+O QUE É TESTE DE UNIDADE:
+é um teste que testa uma única unidade. Ele teste de maneira isolada simulando dependencias(caso exista)
+teste de unidade testa um DOMINIO: É TUDO QUE REPRESENTA CONCEITOS, REGRAS E LOGICAS DE NEGÓCIO
+DOMINIO É DIVIDO EM: ENTIDADES(coisas que sao identificadas) E OBJETOS DE VALORES(nao possui identificador mas pertence as entidades)
+
+POR ONDE COMEÇA: Pelos dominio
+-importante entender as regras de negócios
+
+
+###########################################
+CRIANDO UMA SOLUÇÃO PARA ENTENDER NA PRÁTICA
+############################################
+
+CRIAR SOLUÇÃO NO VISUAL STUDIO: CursoOnline (somente solução)
+
+criar pasta src (codígo de produção)
+criar pasta teste (código de teste)
+
+após fazer isso, criar outra solução do tipo .NET Core -> Projeto de Teste do xUnit: CursoOnline.DominioTest
+jogar solução na pasta test
+
+
+após fazer passo a cima, vamos criar outra solução de DOMINIO do tipo .NET Standard: CursoOnline.Dominio
+jogar na pasta src	
+
+
+
+###############
+BASICO DO XUNIT
+###############
+
+Exemplos pequenos:
+entenda: uma classe de teste nao tem diferença nenhuma de uma classe de produção
+
+criar classe: PrimeiroTeste
+é necessário:
+-alterar classe para public
+-criar método de teste
+-importar namespace do Fact
+-buildar o projeto (Ctrl + B)
+-alterar nome do teste
+-definir assert
+-renomar o teste de acordo com a funcionalidade (DeveVariavel1SerIgualVariavel2) //nome de métodos que informa o teste
+-os três AAA (Organização, Ação, Assert)	
+
+
+	[Fact(DisplayName = "Testar2")] //necessário importar essa namespace
+	public void Testar(){
+		
+		//Organização	
+		var variavel1 = 1;
+		var variavel2 = 2;
+	
+		//Acao
+		variavel2 = variavel1;
+
+		//Assert
+		Assert.Equal(variavel1, variavel2);	
+	}
+
+
+
+#######################
+TESTE DE DOMINIO: CURSO
+#######################
+
+criar pasta Curso (dividir os dominios)
+criar classe CursoTest
+realizar alterações necessárias
+ -obs: recomendado iniciar pelos testes do que pelo proprio codigo de produção (ou seja, criar CursoTest antes)
+
+seguir os passos:
+-inicar teste pelo: criação do curso
+-o que eu tenho que fazer para criar o curos? quais os dados? (utilizar história de usuário)
+-verificar se os dados estao congruentes
+-criar classe Curso dentro do Arquivo
+
+
+public void DeveCriarCurso(){
+
+	var curso = new Curso(nome, cargaHoraria, publicoAlvo, valor);
+
+	Assert.Equal(nome, curso.Nome);
+	Assert.Equal(cargaHoraria, curso.CargaHoraria);
+	Assert.Equal(publicoAlvo, curso.PublicoAlvo);
+	Assert.Equal(valor, curso.Valor);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
